@@ -9,19 +9,21 @@ function start() {
         baseUrlPath: '/api',
         sslKeyFile:  path.join(__dirname, '/keys/60638403-localhost.key'),
         sslCertFile: path.join(__dirname, '/keys/60638403-localhost.cert'),
-        cors: {}
+        cors: {},
+        isGracefulShutdownEnabled: false
     };
 
-    var appInitCb = function(app, options) {
-        // Set up additional middleware here, such as rate limiting, db connection, etc...
-
-        // Attach our api resource routes
+    // Attach our api resource routes
+    var initApiRoutes = function(app, options) {
         app.use(options.baseUrlPath, [
-            require('./resources/logs'),
-            require('./resources/todos')
+            require('./routes/logs'),
+            require('./routes/todos'),
+            require('./routes/auth')
         ]);
     };
-    apiServer.start(appInitCb, serverOptions);
+
+    // Start the api server
+    apiServer.start(initApiRoutes, serverOptions);
 }
 
 throng(start, {

@@ -1,24 +1,16 @@
 'use strict';
-var fs          = require('fs');
-var path        = require('path');
 var _           = require('lodash');
 var gulp        = require('gulp-help')(require('gulp'));
 var $           = require('gulp-load-plugins')({lazy: true});
-var source      = require('vinyl-source-stream');
-var buffer      = require('vinyl-buffer');
 var runSequence = require('run-sequence');
-var merge       = require('merge2');
 var args        = require('yargs').argv;
 var notifier    = require('node-notifier');
 var del         = require('del');
-var browserSync = require('browser-sync');
-var pkg         = require('./package.json');
 
 process.setMaxListeners(0);       // Disable max listeners for gulp
 
 var isVerbose = args.verbose;     // Enable extra verbose logging with --verbose
 var isProduction = args.prod;     // Run extra steps (minification) with production flag --prod
-var isSyncEnabled = !args.nosync; // Disable browsersync with --nosync
 var isWatching = false;           // Enable/disable tasks when running watch
 
 /************************************************************************
@@ -51,15 +43,11 @@ function verbosePrintFiles(taskName) {
  * Clean temporary folders and files
  */
 
-gulp.task('clean-build', false, function(cb) {
-    del(['.tmp', 'dist'], cb);
-});
-
 gulp.task('clean-coverage', false, function(cb) {
     del(['coverage'], cb);
 });
 
-gulp.task('clean', 'Remove all temporary files', ['clean-build', 'clean-coverage']);
+gulp.task('clean', 'Remove all temporary files', ['clean-coverage']);
 
 /************************************************************************
  * JavaScript tasks
@@ -124,29 +112,20 @@ gulp.task('test-server-coverage', ['clean-coverage'], function(cb) {
 });
 
 gulp.task('test', 'Run unit tests', function(cb) {
-    runSequence('clean', 'lint', 'test-server-coverage', cb);
+    runSequence('clean-coverage', 'lint', 'test-server-coverage', cb);
 });
 
 /************************************************************************
  * Build / Watch / Reload tasks
  */
 
-gulp.task('build', 'Builds the source files into a distributable package', function(cb) {
-    runSequence('clean-build', 'build-iterate', cb);
-}, {
-    options: {
-        'prod':    'Enable production minification, sourcemaps, etc.',
-        'verbose': 'Display debugging information'
-    }
-});
-
-gulp.task('build-iterate', false, function(cb) {
+gulp.task('watch-iterate', false, function(cb) {
     runSequence('lint', 'test-server', cb);
 });
 
 gulp.task('watch', false, function() {
     isWatching = true;
-    gulp.watch('src/**/*.js', ['build-iterate']);
+    gulp.watch('src/**/*.js', ['watch-iterate']);
 });
 
 gulp.task('nodemon', false, function(cb) {
@@ -185,7 +164,7 @@ gulp.task('nodemon', false, function(cb) {
     //.on('start', function() {});
 });
 
-gulp.task('serve', 'Watch for file changes and re-run build and lint tasks', ['build'], function(cb) {
+gulp.task('serve', 'Watch for file changes and re-run build and lint tasks', function(cb) {
     // When watch and nodemon tasks run at same time
     // the server seems to randomly blow up (??)
     runSequence(
