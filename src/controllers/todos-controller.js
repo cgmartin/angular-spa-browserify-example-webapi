@@ -2,43 +2,12 @@
 /**
  * Example express router for "todo" resources
  */
-var express = require('express');
-var jsonParser = require('body-parser').json();
 var expressApiServer = require('express-api-server');
 var errors = expressApiServer.errors;
 var getFullBaseUrl = expressApiServer.getFullBaseUrl;
 var validator = require('is-my-json-valid');
 
-var router = module.exports = express.Router();
-
-//
-// Route Definitions
-// -----------------------------------------------------------------
-
-router.all('*', requireAuthentication); // authenticate all methods
-
-router.route('/todos')
-    .get(retrieveTodoList)         // GET /todos
-    .post(jsonParser, createTodo); // POST /todos
-
-router.param('todo_id', fetchTodoParam); // fetch the resource by param id
-
-router.route('/todos/:todo_id')
-    .get(retrieveTodo)      // GET /todos/1
-    .put(updateTodo)        // PUT /todos/1
-    .delete(deleteTodo);    // DELETE /todos/1
-
-//
-// Route Actions
-// -----------------------------------------------------------------
-
-function requireAuthentication(req, res, next) {
-    // Unauthorized example:
-    //return next((new errors.UnauthorizedError()).authBearerHeader());
-    next();
-}
-
-function retrieveTodoList(req, res, next) {
+exports.retrieveTodoList = function(req, res, next) {
     //process.nextTick(function() {
     //    throw new Error('OH NOES!');
     //});
@@ -48,7 +17,7 @@ function retrieveTodoList(req, res, next) {
         {id: 2, title: 'Do something else', isComplete: false}
     ];
     res.json(todos);
-}
+};
 
 var todoSchema = {
     name: 'todo',
@@ -64,7 +33,7 @@ var todoSchema = {
 var validate = validator(todoSchema);
 var filter = validator.filter(todoSchema);
 
-function createTodo(req, res, next) {
+exports.createTodo = function(req, res, next) {
     if (!req.body) { return next(new errors.BadRequestError()); }
 
     // Validate JSON with schema
@@ -80,9 +49,9 @@ function createTodo(req, res, next) {
     res.status(201); // Created
     res.location(getFullBaseUrl(req) + '/todos/' + newTodo.id);
     res.json(newTodo);
-}
+};
 
-function fetchTodoParam(req, res, next, id) {
+exports.fetchTodoParam = function(req, res, next, id) {
     // Retrieve resource from backend, attach to request...
     req.todo = {
         id: id,
@@ -90,20 +59,20 @@ function fetchTodoParam(req, res, next, id) {
         isComplete: false
     };
     next();
-}
+};
 
-function retrieveTodo(req, res, next) {
+exports.retrieveTodo = function(req, res, next) {
     res.json(req.todo); // Already retrieved by param function
-}
+};
 
-function updateTodo(req, res, next) {
+exports.updateTodo = function(req, res, next) {
     var todo = req.todo;
     // Example: Resource is forbidden to this user
     return next(new errors.ForbiddenError());
-}
+};
 
-function deleteTodo(req, res, next) {
+exports.deleteTodo = function(req, res, next) {
     var todo = req.todo;
     // Example: Method is not allowed for this user
     return next(new errors.MethodNotAllowedError());
-}
+};

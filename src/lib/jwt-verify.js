@@ -1,7 +1,7 @@
 // jshint -W016
 'use strict';
 /**
- * Tiny modifications to https://github.com/auth0/express-jwt
+ * Modified from https://github.com/auth0/express-jwt
  */
 var jwt = require('jsonwebtoken');
 var UnauthorizedError = require('express-api-server').errors.UnauthorizedError;

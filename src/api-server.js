@@ -15,11 +15,7 @@ function start() {
 
     // Attach our api resource routes
     var initApiRoutes = function(app, options) {
-        app.use(options.baseUrlPath, [
-            require('./routes/logs'),
-            require('./routes/todos'),
-            require('./routes/auth')
-        ]);
+        app.use(options.baseUrlPath, require('./routes'));
     };
 
     // Start the api server

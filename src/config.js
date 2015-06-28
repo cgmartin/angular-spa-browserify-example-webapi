@@ -32,8 +32,9 @@ module.exports = {
     jwt: {
         secret: 'a8265adf-941c-4d6e-b28b-8fa9318bcae7',
         opts: {
-            expiresInMinutes: 7 * 24 * 60 // 1 week
-        }
+            expiresInMinutes: 5
+        },
+        refreshExpiresInMinutes: 10080 // 1 week
     }
 };
 
