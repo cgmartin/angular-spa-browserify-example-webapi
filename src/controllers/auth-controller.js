@@ -2,6 +2,7 @@
 'use strict';
 /**
  * Auth Service using JSON Web Tokens (JWT)
+ * ----------------------------------------
  * https://stormpath.com/blog/token-auth-spa/
  * http://stackoverflow.com/questions/3487991/why-does-oauth-v2-have-both-access-and-refresh-tokens/12885823#12885823
  * http://blog.matoski.com/articles/jwt-express-node-mongoose/
@@ -9,6 +10,7 @@
  * http://www.digitalsyncretism.com/blog/token-authentication-the-practice/
  *
  * OAUTH2 Design
+ * -------------
  * https://aaronparecki.com/articles/2012/07/29/1/oauth2-simplified
  * https://github.com/t1msh/node-oauth20-provider
  * http://oauth.net/2/

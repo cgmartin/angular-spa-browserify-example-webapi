@@ -1,5 +1,5 @@
 'use strict';
-
+// http://json-schema.org/example2.html
 var validator = require('is-my-json-valid');
 
 var schema = {

@@ -138,7 +138,7 @@ gulp.task('nodemon', false, function(cb) {
             'NODE_ENV': 'development',
             'PORT': serverPort
         },
-        nodeArgs: ['--debug'],
+        nodeArgs: ['--debug=5800'],
         ignore: [
             'coverage/**', 'node_modules/**',
             'gulpfile.js', '.idea/**', '.git/**'

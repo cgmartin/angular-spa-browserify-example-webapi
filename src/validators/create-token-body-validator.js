@@ -1,5 +1,5 @@
 'use strict';
-
+// http://json-schema.org/example2.html
 var validator = require('is-my-json-valid');
 
 var schema = {
@@ -8,7 +8,7 @@ var schema = {
     additionalProperties: false,
     required: ['clientId', 'username', 'password'],
     properties: {
-        clientId: { type: 'string', oneOf: ['browser'] },
+        clientId: { enum: ['browser'] },
         username: { type: 'string', maxLength: 255 },
         password: { type: 'string', maxLength: 255 }
     }
