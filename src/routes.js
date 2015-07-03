@@ -39,7 +39,11 @@ function createAuthRouter() {
     authRouter.post('/refresh-tokens',
         jsonParser,
         jwtVerify({secret: config.jwt.secret, ignoreExpiration: true}),
-        authController.refreshToken
+        authController.createRefreshToken
+    );
+    authRouter.delete('/refresh-tokens/:refresh_token_id',
+        jwtVerify({secret: config.jwt.secret, ignoreExpiration: true}),
+        authController.revokeRefreshToken
     );
     return authRouter;
 }

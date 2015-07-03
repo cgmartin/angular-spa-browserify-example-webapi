@@ -19,6 +19,13 @@ exports.removeByUserIdClientId = function(userId, clientId) {
         .run();
 };
 
+exports.removeRefreshToken = function(token) {
+    return r.table('refreshTokens')
+        .get(token)
+        .delete()
+        .run();
+};
+
 exports.saveRefreshToken = function(token, userId, clientId, expiresMin) {
     var expires = r.now().add(expiresMin * 60);
     return exports.removeByUserIdClientId(userId, clientId)

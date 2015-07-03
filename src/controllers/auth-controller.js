@@ -80,7 +80,7 @@ exports.createToken = function(req, res, next) {
  * When the user first authenticates, a refresh token is created to allow extending the
  * session without having to supply credentials.
  */
-exports.refreshToken = function(req, res, next) {
+exports.createRefreshToken = function(req, res, next) {
     if (!req.jwtData.user || !req.jwtData.user.id) {
         return next(new errors.UnauthorizedError('Authentication failed'));
     }
@@ -115,16 +115,55 @@ exports.refreshToken = function(req, res, next) {
                 return refreshTokenData;
             });
     }
+};
 
-    function getUserData(refreshTokenData) {
-        return userDal
-            .getUser(refreshTokenData.userId)
-            .then(function(user) {
-                if (!user) {
-                    return Promise.reject(new errors.UnauthorizedError('User not found'));
+/**
+ * Revoke a refresh token to ensure a "log out"
+ *
+ * Requires a JWT Access Token (expired is OK)
+ */
+exports.revokeRefreshToken = function(req, res, next) {
+    if (!req.jwtData.user || !req.jwtData.user.id) {
+        return next(new errors.UnauthorizedError('Authentication failed'));
+    }
+
+    var refreshTokenId = req.params['refresh_token_id'];
+    if (!refreshTokenId) {
+        return next(new errors.BadRequestError());
+    }
+
+    getRefreshTokenData(refreshTokenId)
+        .then(getUserData)
+        .then(deleteRefreshToken)
+        .then(sendResponse)
+        .catch(handleError('auth delete refresh token', req, next));
+
+    function getRefreshTokenData(refreshToken) {
+        return refreshTokenDal.getRefreshToken(refreshToken)
+            .then(function(refreshTokenData) {
+                if (!refreshTokenData) {  // Refresh token data not found
+                    return Promise.reject(new errors.BadRequestError('Refresh token not found'));
                 }
-                return user; // user
+                // TODO: Also allow admins with revoke_refresh_token scope
+                if (refreshTokenData.userId !== req.jwtData.user.id) { // User must match
+                    return Promise.reject(new errors.BadRequestError('Refresh token not found'));
+                }
+                return refreshTokenData;
             });
+    }
+
+    function deleteRefreshToken() {
+        // Delete refresh token asynchronously, don't need to wait
+        refreshTokenDal.removeRefreshToken(refreshTokenId)
+            .catch(function(err) {
+                req.log.error({error: err}, 'delete refresh token error');
+            });
+        return true;
+    }
+
+    function sendResponse() {
+        res.status(204);
+        res.end();
     }
 };
 
@@ -164,6 +203,17 @@ function generateAccessToken(req) {
 
         return [token, refreshToken];
     };
+}
+
+function getUserData(refreshTokenData) {
+    return userDal
+        .getUser(refreshTokenData.userId)
+        .then(function(user) {
+            if (!user) {
+                return Promise.reject(new errors.UnauthorizedError('User not found'));
+            }
+            return user; // user
+        });
 }
 
 function sendTokenResponse(res) {
