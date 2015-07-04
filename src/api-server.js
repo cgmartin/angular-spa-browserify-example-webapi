@@ -23,7 +23,7 @@ function start() {
 }
 
 throng(start, {
-    workers: process.env.WEB_CONCURRENCY,
+    workers: process.env.WEB_CONCURRENCY || 1,
     lifetime: Infinity
 });
 
