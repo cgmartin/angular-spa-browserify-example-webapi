@@ -19,19 +19,14 @@ Configuration options are passed in by the consumer or via environment variables
 
 ## Features
 
-* **AngularJS HTML5 mode**: Catch all non-file routes and forward to index.html.
-* **Security headers** using [Helmet](https://github.com/helmetjs/helmet) middleware.
-* **Correlation ID Cookies**: Creates unique session and "conversation" (browser lifetime) cookies. Useful for tracking client API requests throughout a user's session lifetime.
-* **SPA Boot Configuration**: JSONP launcher that provides runtime configuration for the client.
-* **Graceful shutdown**: Listens for SIGTERM/SIGINT and unhandled exceptions, and waits for open connections to complete before exiting.
-* **JSON format access logs**: Great for log analysis and collectors such as Splunk, Fluentd, Graylog, Logstash, etc.
-* **Enforce HTTPS**: Redirects users from HTTP urls to HTTPS.
-* **Pretty Print**: Format your JSON reponses using `?pretty=true` query param on any endpoint.
+* **/auth**: OAuth endpoints for login and JWT token refresh.
+* **/logs**: Client to server logging.
+* **/todos**: Example todo lists resource.
 
 ## Installation
 
 1. Install [Node.js](https://nodejs.org/download/)
-1. Install Gulp/Karma: `npm -g i gulp karma`
+1. Install Gulp: `npm -g i gulp`
 1. Clone this repo
 1. Install dependencies: `npm i`
 1. Start the app in dev mode: `npm run dev`
@@ -46,7 +41,7 @@ After installation, the following actions are available:
 
 And run your `server.js` with optional runtime environment variables:
 ```bash
-$ NODE_ENV=production STATIC_SSL=1 STATIC_PORT=443 node server.js
+$ NODE_ENV=production API_SSL=1 API_PORT=443 node src/api-server.js
 ```
 
 See [src/config.js](https://github.com/cgmartin/express-rest-api-server/blob/master/src/config.js)
@@ -54,28 +49,16 @@ for configuration options to override.
 
 ### Default Environment Variables
 
-* `NODE_ENV` : Enables compression when set to "production".
-* `STATIC_WEBROOT` : Path to the web root directory.
-* `STATIC_INSTANCE` : The instance id of the server process, to be logged (default: "1").
-* `STATIC_SESSION_MAXAGE` : The time in ms until the session ID cookie should expire (default: 2 hours). This is just a tracking cookie, no session storage is used here.
-* `STATIC_REV_PROXY` : The server is behind a reverse proxy when set to "1".
-* `STATIC_PORT` : The port to run on (default: 8000).
-* `STATIC_SSL` : Use a HTTPS server when set to "1". Enforces HTTPS by redirecting HTTP users when used with a reverse HTTP/HTTPS proxy.
-* `STATIC_SSL_KEY` : Path to the SSL key file.
-* `STATIC_SSL_CERT` : Path to the SSL cert file.
-
-## Folder Structure
-
-```
-├── coverage          # Coverage reports
-├── example           # Example client assets for testing
-└── src
-    ├── middleware    # Express middleware
-    ├── app.js        # Creates and configures an express app
-    ├── config.js     # Configuration options
-    ├── errors.js     # Error objects
-    └── server.js     # (entrypoint) Starts the express app on a port
-```
+* `API_BASE_URL` : Base url path for all endpoints (default: "/api").
+* `API_USE_CLUSTER` : Use a node cluster module (throng) to create processes per CPU core.
+* `API_HEAPDUMP` : Enable `heapdump` support (trigger dumps via `kill -USR2 {pid}`).
+* `API_RDB_CONN` : RethinkDB connection string.
+* `API_JWT_SECRET` : JSON Web Token Hash Secret. **NOTE:** You'll want to ensure this is unique per environment.
+* `API_REV_PROXY` : The server is behind a reverse proxy when set to "1".
+* `API_PORT` : The port to run on (default: 8000).
+* `API_SSL` : Use a HTTPS server when set to "1". Enforces HTTPS by redirecting HTTP users when used with a reverse HTTP/HTTPS proxy.
+* `API_SSL_KEY` : Path to the SSL key file.
+* `API_SSL_CERT` : Path to the SSL cert file.
 
 ## Libraries & Tools
 

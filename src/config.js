@@ -10,7 +10,7 @@ module.exports = {
     useCluster: process.env.API_USE_CLUSTER || false,
 
     // Enable heapdump support
-    heapdumpEnabled: (process.env.STATIC_HEAPDUMP === '1'),
+    heapdumpEnabled: (process.env.API_HEAPDUMP === '1'),
 
     rethinkDb: {
         // Database name
