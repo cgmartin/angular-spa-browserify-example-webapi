@@ -1,7 +1,6 @@
 # spa-api-server-example
 
-[![Build Status](https://travis-ci.org/cgmartin/spa-api-server-example.svg?branch=master)](https://travis-ci.org/cgmartin/spa-api-server-example)
-[![Dependency Status](https://david-dm.org/cgmartin/spa-api-server-example.svg)](https://david-dm.org/cgmartin/spa-api-server-example)
+[![Dependency Status](https://david-dm.org/cgmartin/angular-spa-browserify-example-webapi.svg)](https://david-dm.org/cgmartin/angular-spa-browserify-example-webapi)
 
 ## Synopsis
 
@@ -44,7 +43,7 @@ And run your `server.js` with optional runtime environment variables:
 $ NODE_ENV=production API_SSL=1 API_PORT=443 node src/api-server.js
 ```
 
-See [src/config.js](https://github.com/cgmartin/express-rest-api-server/blob/master/src/config.js)
+See [src/config.js](./src/config.js)
 for configuration options to override.
 
 ### Default Environment Variables
