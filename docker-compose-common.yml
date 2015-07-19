@@ -1,0 +1,11 @@
+webapi:
+  build: .
+  dockerfile: Dockerfile-dev
+  command: serve
+  volumes:
+    - src:/app/src:ro
+
+db:
+  image: rethinkdb:latest
+  volumes:
+    - data:/data

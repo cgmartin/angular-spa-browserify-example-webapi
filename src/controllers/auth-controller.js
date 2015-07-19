@@ -23,7 +23,7 @@ var userDal = require('../data/user-data');
 var refreshTokenDal = require('../data/refresh-token-data');
 var uuid = require('uuid');
 var Promise = require('bluebird');
-var hashPassword = Promise.promisify(require('../lib/hash-password'));
+var hashPassword = Promise.promisify(require('../lib/hash-password')(config.crypto));
 var createTokenBodyValidator = require('../validators/create-token-body-validator');
 var refreshTokenBodyValidator = require('../validators/refresh-token-body-validator');
 
@@ -197,7 +197,7 @@ function generateAccessToken(req) {
             user: {
                 id:    user.id,
                 name:  user.name,
-                roles: ['admin'] // TODO
+                scope: ['read', 'write'] // TODO
             }
         }, config.jwt.secret, config.jwt.opts);
 

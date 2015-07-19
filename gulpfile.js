@@ -130,7 +130,7 @@ gulp.task('watch', false, function() {
 
 gulp.task('nodemon', false, function(cb) {
     var firstStart = true;
-    var serverPort = 8001;
+    var serverPort = 8100;
     $.nodemon({
         script: 'src/api-server.js',
         ext: 'js',
@@ -138,7 +138,7 @@ gulp.task('nodemon', false, function(cb) {
             'NODE_ENV': 'development',
             'PORT': serverPort
         },
-        nodeArgs: ['--debug=5800'],
+        nodeArgs: ['--debug=5810'],
         ignore: [
             'coverage/**', 'node_modules/**',
             'gulpfile.js', '.idea/**', '.git/**'

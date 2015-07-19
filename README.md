@@ -1,40 +1,48 @@
-# express-rest-api-server
+# spa-api-server-example
 
-An opinionated static server library for Angular single page applications (SPAs).
-
-[![Build Status](https://travis-ci.org/cgmartin/express-rest-api-server.svg?branch=master)](https://travis-ci.org/cgmartin/express-rest-api-server)
-[![Dependency Status](https://david-dm.org/cgmartin/express-rest-api-server.svg)](https://david-dm.org/cgmartin/express-rest-api-server)
-[![devDependency Status](https://david-dm.org/cgmartin/express-rest-api-server/dev-status.svg)](https://david-dm.org/cgmartin/express-rest-api-server#info=devDependencies)
+[![Build Status](https://travis-ci.org/cgmartin/spa-api-server-example.svg?branch=master)](https://travis-ci.org/cgmartin/spa-api-server-example)
+[![Dependency Status](https://david-dm.org/cgmartin/spa-api-server-example.svg)](https://david-dm.org/cgmartin/spa-api-server-example)
 
 ## Synopsis
 
-The express-rest-api-server is specifically meant as a reusable static file server
-and Angular "HTML5 Mode" route handler. It could be replaced by Apache Web Server, Nginx, or other
-static web servers. No web API/REST calls allowed here.
+Demonstrates REST API endpoints for the
+[angular-spa-browserify-example](https://github.com/cgmartin/angular-spa-browserify-example) client.
 
-This static server project is meant to accompany a [SPA client](https://github.com/cgmartin/angular-spa-browserify-example)
-and a set of separate Node.js microservices (REST webservice, Chat Server, Reverse Proxy).
-It is designed with portability and scalability in mind (see [Twelve Factors](http://12factor.net/)).
+This API server is built on top of the [express-api-server](https://github.com/cgmartin/express-api-server) module,
+which provides built-in web security, error handling, and logging.
+
+It is part of a set of separate Node.js microservices (Static Web Server, Chat Server, Reverse Proxy) to demonstrate
+a Single Page Web Application stack end-to-end, and is designed with portability and scalability in mind
+(see [Twelve Factors](http://12factor.net/)).
 
 Configuration options are passed in by the consumer or via environment variables at runtime.
 
-## Quick Start / Usage
+## Features
 
-```bash
-$ npm install express-rest-api-server --save
-```
+* **AngularJS HTML5 mode**: Catch all non-file routes and forward to index.html.
+* **Security headers** using [Helmet](https://github.com/helmetjs/helmet) middleware.
+* **Correlation ID Cookies**: Creates unique session and "conversation" (browser lifetime) cookies. Useful for tracking client API requests throughout a user's session lifetime.
+* **SPA Boot Configuration**: JSONP launcher that provides runtime configuration for the client.
+* **Graceful shutdown**: Listens for SIGTERM/SIGINT and unhandled exceptions, and waits for open connections to complete before exiting.
+* **JSON format access logs**: Great for log analysis and collectors such as Splunk, Fluentd, Graylog, Logstash, etc.
+* **Enforce HTTPS**: Redirects users from HTTP urls to HTTPS.
+* **Pretty Print**: Format your JSON reponses using `?pretty=true` query param on any endpoint.
 
-Create a `server.js` wrapper script, passing in the configuration options that apply for your app:
-```js
-// server.js
-var staticServer = require('express-rest-api-server');
-staticServer.start({
-    webRootPath: './dist/web-root',
-    spaBoot:     require('./spa-boot'),
-    sslKeyFile:  './keys/my-domain.key',
-    sslCertFile: './keys/my-domain.cert'
-});
-```
+## Installation
+
+1. Install [Node.js](https://nodejs.org/download/)
+1. Install Gulp/Karma: `npm -g i gulp karma`
+1. Clone this repo
+1. Install dependencies: `npm i`
+1. Start the app in dev mode: `npm run dev`
+1. Point browser to <http://localhost:3000/>
+
+After installation, the following actions are available:
+
+* `npm run dev` : Builds for development, runs a local webserver, and watches for changes.
+* `npm test` : Runs TypeScript file linting and unit tests once.
+* `karma start` : Runs unit tests continuously, watching for changes.
+* `npm run build` : Creates production client assets under the `dist/` folder, for deployment with a static webserver or CDN.
 
 And run your `server.js` with optional runtime environment variables:
 ```bash
@@ -55,32 +63,6 @@ for configuration options to override.
 * `STATIC_SSL` : Use a HTTPS server when set to "1". Enforces HTTPS by redirecting HTTP users when used with a reverse HTTP/HTTPS proxy.
 * `STATIC_SSL_KEY` : Path to the SSL key file.
 * `STATIC_SSL_CERT` : Path to the SSL cert file.
-
-## Features
-
-* **AngularJS HTML5 mode**: Catch all non-file routes and forward to index.html.
-* **Security headers** using [Helmet](https://github.com/helmetjs/helmet) middleware.
-* **Correlation ID Cookies**: Creates unique session and "conversation" (browser lifetime) cookies. Useful for tracking client API requests throughout a user's session lifetime.
-* **SPA Boot Configuration**: JSONP launcher that provides runtime configuration for the client.
-* **Graceful shutdown**: Listens for SIGTERM/SIGINT and unhandled exceptions, and waits for open connections to complete before exiting.
-* **JSON format access logs**: Great for log analysis and collectors such as Splunk, Fluentd, Graylog, Logstash, etc.
-* **Enforce HTTPS**: Redirects users from HTTP urls to HTTPS.
-* **Pretty Print**: Format your JSON reponses using `?pretty=true` query param on any endpoint.
-
-## Contributing
-
-1. Install [Node.js](https://nodejs.org/download/)
-1. Install Gulp: `npm -g i gulp`
-1. Clone this repo
-1. Install dependencies: `npm i`
-1. Start the app in dev mode: `npm start`
-1. Point browser to <http://localhost:3000/> and watch the console for server logs
-
-After installation, the following actions are available:
-
-* `npm start` : Runs in development mode, starting the server and a local webserver, running linting and unit tests, and restarting upon file changes.
-* `npm test` : Runs JavaScript file linting and unit tests.
-* `npm run watch` : Alternative development mode - does not run servers. Only runs linting and tests upon file changes.
 
 ## Folder Structure
 

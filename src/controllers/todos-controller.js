@@ -16,7 +16,10 @@ exports.retrieveTodoList = function(req, res, next) {
         {id: 1, title: 'Do something', isComplete: true},
         {id: 2, title: 'Do something else', isComplete: false}
     ];
-    res.json(todos);
+
+    setTimeout(function() {
+        res.json(todos);
+    }, 1000);
 };
 
 var todoSchema = {

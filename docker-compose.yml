@@ -1,0 +1,30 @@
+webapi:
+  extends:
+    file: docker-compose-common.yml
+    service: webapi
+  ports:
+    - "8100:8100"
+    - "5810:5810"
+  environment:
+    - API_RDB_CONN=db:28015
+  links:
+    - db
+
+db:
+  extends:
+    file: docker-compose-common.yml
+    service: db
+  ports:
+    - "8080:8080"
+    - "28015:28015"
+#  volumes_from:
+#    - dbData
+
+## Data Volume Container Example
+## Allows db image to be upgraded without losing data
+#dbData:
+#  image: busybox
+#  volumes:
+#    - data:/data
+#  command: echo Data Volume for db
+

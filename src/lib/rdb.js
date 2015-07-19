@@ -20,7 +20,7 @@ module.exports = require('rethinkdbdash')({
         var hostPort = server.split(':');
         return {
             host: hostPort[0],
-            port: hostPort[1]
+            port: parseInt(hostPort[1], 10)
         };
     }),
 
