@@ -6,6 +6,8 @@ webapi:
     - "8100:8100"
     - "5810:5810"
   environment:
+    - SERVICE_8100_NAME=webapi
+    - SERVICE_5810_NAME=webapi-debug
     - API_RDB_CONN=db:28015
   links:
     - db

@@ -13,7 +13,7 @@ exports.retrieveTodoList = function(req, res, next) {
     //});
     //// ...Retrieve from backend...
     var todos = [
-        {id: 1, title: 'Do something', isComplete: true},
+        {id: 1, title: 'Do something!', isComplete: true},
         {id: 2, title: 'Do something else', isComplete: false}
     ];
 

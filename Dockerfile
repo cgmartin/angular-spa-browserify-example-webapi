@@ -12,7 +12,7 @@ COPY package.json /app/
 RUN npm install --production
 
 ## Copy source
-COPY . /app/
+COPY src /app/src
 
 ## TODO: Cachebust this section to ensure using latest dependencies
 RUN npm install express-api-server@latest

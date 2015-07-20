@@ -3,7 +3,10 @@ webapi:
   dockerfile: Dockerfile-dev
   command: serve
   volumes:
-    - src:/app/src:ro
+    - src:/app/src
+    - gulpfile.js:/app/gulpfile.js
+    - .jscsrc:/app/.jscsrc
+    - .jshintrc:/app/.jshintrc
 
 db:
   image: rethinkdb:latest
