@@ -1,5 +1,7 @@
-.idea
 .git
-node_modules
-data
+.idea
 coverage
+data
+node_modules
+docker-compose*
+

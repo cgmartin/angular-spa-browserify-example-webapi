@@ -9,15 +9,11 @@ WORKDIR /app
 
 ## Cache 3rd-party NPM modules
 COPY package.json /app/
-RUN npm install
-
-## TODO: Cachebust this section to ensure using latest dependencies
-#RUN npm install express-api-server@latest
+RUN npm install --unsafe-perm
 
 ## Expose gulp as default command
 ENTRYPOINT ["gulp"]
 CMD ["--help"]
 
-EXPOSE 8100
-EXPOSE 5810
+EXPOSE 8100 5810
 
