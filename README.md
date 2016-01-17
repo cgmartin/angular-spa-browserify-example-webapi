@@ -1,6 +1,7 @@
 # spa-api-server-example
 
 [![Dependency Status](https://david-dm.org/cgmartin/angular-spa-browserify-example-webapi.svg)](https://david-dm.org/cgmartin/angular-spa-browserify-example-webapi)
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 ## Synopsis
 
